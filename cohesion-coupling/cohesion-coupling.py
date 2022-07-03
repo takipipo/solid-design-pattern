@@ -7,18 +7,20 @@ class VehicleInfo:
         self.brand = brand
         self.catalogue_price = catalogue_price
         self.is_electric = is_electric
-    
+
     def compute_tax(self) -> float:
         if self.is_electric:
             tax_ratio = 0.02
         else:
             tax_ratio = 0.05
-        
+
         return self.catalogue_price * tax_ratio
 
     def display_vehicle_info(self):
         print(f"Brand: {self.brand}")
         print(f"Payable tax: {self.compute_tax()}")
+
+
 class Vehicle:
     def __init__(self, vehicle_id: str, license_plate: str, info: VehicleInfo) -> None:
         self.vehicle_id = vehicle_id
@@ -29,11 +31,17 @@ class Vehicle:
         self.info.display_vehicle_info()
         print(f"Id: {self.vehicle_id}")
         print(f"License plate: {self.license_plate}")
+
+
 class VehicleRegistry:
     vehicle_info = {}
 
     def __init__(self) -> None:
-        self._add_vehicle_info("Tesla Model 3",60000, True,)
+        self._add_vehicle_info(
+            "Tesla Model 3",
+            60000,
+            True,
+        )
         self._add_vehicle_info("Volkswagen ID3", 80000, False)
 
     def _add_vehicle_info(self, brand: str, electric: bool, catalogue_price: int):
@@ -62,5 +70,6 @@ class Application:
         vehicle.display_vehicle()
 
 
-app = Application()
-app.register_vehicle("Tesla Model 3")
+if __name__ == "__main__":
+    app = Application()
+    app.register_vehicle("Tesla Model 3")
