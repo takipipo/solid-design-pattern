@@ -16,14 +16,19 @@ class VehicleInfo:
         
         return self.catalogue_price * tax_ratio
 
-
+    def display_vehicle_info(self):
+        print(f"Brand: {self.brand}")
+        print(f"Payable tax: {self.compute_tax()}")
 class Vehicle:
     def __init__(self, vehicle_id: str, license_plate: str, info: VehicleInfo) -> None:
         self.vehicle_id = vehicle_id
         self.license_plate = license_plate
         self.info = info
 
-
+    def display_vehicle(self):
+        self.info.display_vehicle_info()
+        print(f"Id: {self.vehicle_id}")
+        print(f"License plate: {self.license_plate}")
 class VehicleRegistry:
     vehicle_info = {}
 
@@ -50,20 +55,12 @@ class Application:
     def register_vehicle(self, brand: str):
         # create a registry instance
         registry = VehicleRegistry()
-        print(registry.vehicle_info)
-
         vehicle = registry.create_vehicle(brand)
-
-        # compute the payable tax
-        payable_tax = vehicle.info.compute_tax()
 
         # print out the vehicle registration information
         print("Registration complete. Vehicle information:")
-        print(f"Brand: {brand}")
-        print(f"Id: {vehicle.vehicle_id}")
-        print(f"License plate: {vehicle.license_plate}")
-        print(f"Payable tax: {payable_tax}")
+        vehicle.display_vehicle()
 
 
 app = Application()
-app.register_vehicle("Volkswagen ID3")
+app.register_vehicle("Tesla Model 3")
