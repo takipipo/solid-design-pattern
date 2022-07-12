@@ -41,7 +41,7 @@ class RandomProcessStrategy(ProcessStrategyInterface):
 
 
 class CustomerSupport:
-    def __init__(self, processing_strategy: str = "fifo"):
+    def __init__(self, processing_strategy: ProcessStrategyInterface):
         self.tickets = []
         self.processing_strategy = processing_strategy
 
@@ -54,17 +54,9 @@ class CustomerSupport:
             print("There are no tickets to process. Well done!")
             return
 
-        if self.processing_strategy == "fifo":
-            for ticket in self.tickets:
-                self.process_ticket(ticket)
-        elif self.processing_strategy == "filo":
-            for ticket in reversed(self.tickets):
-                self.process_ticket(ticket)
-        elif self.processing_strategy == "random":
-            list_copy = self.tickets.copy()
-            random.shuffle(list_copy)
-            for ticket in list_copy:
-                self.process_ticket(ticket)
+        ordered_tickets = self.processing_strategy.create_ordering(self.tickets)
+        for ticket in ordered_tickets:
+            self.process_ticket(ticket)
 
     def process_ticket(self, ticket: SupportTicket):
         print("==================================")
@@ -73,9 +65,9 @@ class CustomerSupport:
         print(f"Issue: {ticket.issue}")
         print("==================================")
 
-
+random_process_strategy = RandomProcessStrategy()
 # create the application
-app = CustomerSupport("filo")
+app = CustomerSupport(random_process_strategy)
 
 # register a few tickets
 app.create_ticket("John Smith", "My computer makes strange sounds!")
