@@ -39,6 +39,12 @@ class RandomProcessStrategy(ProcessStrategyInterface):
         random.shuffle(_list_tickets)
         return _list_tickets
 
+class BlackHoleProcessStrategy(ProcessStrategyInterface):
+    def create_ordering(self, list_tickets: List[SupportTicket]) -> List[SupportTicket]:
+        _list_tickets = list_tickets.copy()
+        _list_tickets.pop(random.randint(0, len(_list_tickets) - 1))
+
+        return _list_tickets
 
 class CustomerSupport:
     def __init__(self, processing_strategy: ProcessStrategyInterface):
@@ -49,12 +55,12 @@ class CustomerSupport:
         self.tickets.append(SupportTicket(customer, issue))
 
     def process_tickets(self):
+        ordered_tickets = self.processing_strategy.create_ordering(self.tickets)
         # if it's empty, don't do anything
         if len(self.tickets) == 0:
             print("There are no tickets to process. Well done!")
             return
 
-        ordered_tickets = self.processing_strategy.create_ordering(self.tickets)
         for ticket in ordered_tickets:
             self.process_ticket(ticket)
 
@@ -65,9 +71,8 @@ class CustomerSupport:
         print(f"Issue: {ticket.issue}")
         print("==================================")
 
-random_process_strategy = RandomProcessStrategy()
 # create the application
-app = CustomerSupport(random_process_strategy)
+app = CustomerSupport(BlackHoleProcessStrategy())
 
 # register a few tickets
 app.create_ticket("John Smith", "My computer makes strange sounds!")
