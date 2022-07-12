@@ -1,23 +1,46 @@
 import string
 import random
+
 from typing import List
+from abc import abstractmethod, ABC
 
 
 def generate_id(length=8):
     # helper function for generating an id
-    return ''.join(random.choices(string.ascii_uppercase, k=length))
+    return "".join(random.choices(string.ascii_uppercase, k=length))
 
 
 class SupportTicket:
-
     def __init__(self, customer, issue):
         self.id = generate_id()
         self.customer = customer
         self.issue = issue
 
 
-class CustomerSupport:
+class ProcessStrategyInterface(ABC):
+    @abstractmethod
+    def create_ordering(self, list_tickets: List[SupportTicket]) -> List[SupportTicket]:
+        pass
 
+
+class FIFOProcessStrategy(ProcessStrategyInterface):
+    def create_ordering(self, list_tickets: List[SupportTicket]) -> List[SupportTicket]:
+        return list_tickets.copy()
+
+
+class FILOProcessStrategy(ProcessStrategyInterface):
+    def create_ordering(self, list_tickets: List[SupportTicket]) -> List[SupportTicket]:
+        return list_tickets.copy().reverse()
+
+
+class RandomProcessStrategy(ProcessStrategyInterface):
+    def create_ordering(self, list_tickets: List[SupportTicket]) -> List[SupportTicket]:
+        _list_tickets = list_tickets.copy()
+        random.shuffle(_list_tickets)
+        return _list_tickets
+
+
+class CustomerSupport:
     def __init__(self, processing_strategy: str = "fifo"):
         self.tickets = []
         self.processing_strategy = processing_strategy
