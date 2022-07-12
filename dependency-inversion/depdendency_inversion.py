@@ -15,7 +15,11 @@ class LightBulb(Switchable):
     def turn_off(self):
         print("LightBulb: turned off...")
 
-
+class AirConditioner(Switchable):
+    def turn_on(self):
+        print("Air Conditioner: turned on...")
+    def turn_off(self):
+        print("Air Conditioner: turned off...")
 class ElectricPowerSwitch:
 
     def __init__(self, device: Switchable):
